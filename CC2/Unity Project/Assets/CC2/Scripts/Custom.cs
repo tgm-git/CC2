@@ -17,15 +17,15 @@ public class Custom : MonoBehaviour
     int buttonHeight = 50;
     int buttonWidth = 150;
 
-    float height1 = Screen.height * 0.3F;
-    float height2 = Screen.height * 0.36F;
-    float height3 = Screen.height * 0.42F;
-    float height4 = Screen.height * 0.48F;
+    float height0 = Screen.height * 0.32F;
+    float height1 = Screen.height * 0.4F;
+    float height2 = Screen.height * 0.46F;
+    float height3 = Screen.height * 0.52F;
+    float height4 = Screen.height * 0.58F;
 
     int widthLeft = Screen.width / 6;
     int widthMid = Screen.width / 4;
     int widthRight = Screen.width / 3;
-    //int width4 = Screen.width / 8;
 
     //Assign in inspector
     public GameObject Mag1;
@@ -50,6 +50,7 @@ public class Custom : MonoBehaviour
     int intMag = 0;
     int intSight = 0;
     int intUnder = 0;
+    int intGun = 0;
 	
 	// Update is called once per frame
     void Start() {
@@ -157,6 +158,18 @@ public class Custom : MonoBehaviour
 	}
 
     void OnGUI () { 
+
+        //Guns
+        if (GUI.Button(new Rect(widthLeft, height0, buttonWidth, buttonHeight), "CR"))
+        {
+            intGun = 0;
+        }
+
+        if (GUI.Button(new Rect(widthMid, height0, buttonWidth, buttonHeight), "AR"))
+        {
+            intGun = 2;
+        }
+
         //Barrel
         if (GUI.Button(new Rect(widthLeft, height1, buttonWidth, buttonHeight), "Barrel 1"))
         {
