@@ -13,5 +13,6 @@ ehthumbs.db
 *.csproj
 *.unityproj
 *.sln
+*.suo
 *.meta
 BattleBots/Unityprojekt/Library/*
