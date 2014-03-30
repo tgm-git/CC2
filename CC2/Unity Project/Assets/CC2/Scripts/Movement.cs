@@ -27,7 +27,7 @@ public class Movement : MonoBehaviour
         //First we read the input of where the player wants to go.
         moveDirection = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
 
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space) && grounded == true)
         {
             jumping = true;
             startPos = transform.position.y;
@@ -49,6 +49,10 @@ public class Movement : MonoBehaviour
         {
             jumping = false;
         }
+    }
+    void OnCollisionExit()
+    {
+        grounded = false;
     }
     void OnCollisionStay()
     {
