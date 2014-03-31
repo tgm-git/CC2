@@ -21,9 +21,15 @@ public class Movement : MonoBehaviour
     private float startPos = 0;
     public CrouchVars crouchvars = new CrouchVars();
     private GameObject mainCam;
+    public Animation weaponAni;
+    public Animation cameraAni;
+    public float walkAniSpeed = 0.8f;
+    private ShootScript shootScript;
 
     void Start()
     {
+        shootScript = gameObject.GetComponent<ShootScript>();
+        weaponAni["weaponWalk"].speed = walkAniSpeed;
         mainCam = Camera.main.gameObject;
         actualMovespeed = movespeed;
     }
@@ -39,6 +45,36 @@ public class Movement : MonoBehaviour
         }
         //Then we apply the position to the player
         transform.Translate(moveDirection * actualMovespeed * Time.deltaTime, Space.Self);
+        #region animation
+        //Walk animation
+        if(moveDirection.magnitude > 0)
+        {
+            if (!weaponAni.IsPlaying("weaponRecoil") && !weaponAni.IsPlaying("weaponWalk") && !weaponAni.IsPlaying("weaponDown") && !shootScript.weaponUp && !weaponAni.IsPlaying("weaponMelee"))
+            {
+                weaponAni.CrossFade("weaponWalk");
+            }
+            if(!cameraAni.IsPlaying("CameraWalk"))
+            {
+                cameraAni.CrossFade("CameraWalk");
+            }
+        }
+        else if(moveDirection.magnitude <= 0)
+        {
+            if (weaponAni.IsPlaying("weaponWalk") && weaponAni.IsPlaying("weaponJumpInAir") == false && !weaponAni.IsPlaying("weaponMelee"))
+            {
+                weaponAni.CrossFade("weaponIdle");
+            }
+            if(cameraAni.IsPlaying("CameraWalk") == true)
+            {
+                cameraAni.CrossFade("CameraIdle");
+            }
+        }
+        //In air stuff
+        if(grounded == false)
+        {
+
+        }
+        #endregion
 
         #region crouch mechanic
         if (Input.GetKeyDown(KeyCode.C))

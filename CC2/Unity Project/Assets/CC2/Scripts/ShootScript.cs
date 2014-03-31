@@ -9,7 +9,8 @@ public class ShootScript : MonoBehaviour {
     public LineRenderer line;
     public float fireRate = 0.5f;
     private float fireTimer = 0;
-    private bool weaponUp = false;
+    [System.NonSerialized]
+    public bool weaponUp = false;
     private Transform mainCam;
     public float acurracy = 0.02f;
     public float cameraShakeAmount = 0.1f;
@@ -24,9 +25,15 @@ public class ShootScript : MonoBehaviour {
 	void Update () 
     {
         //We check for the player input
-	    if(Input.GetKey(KeyCode.Mouse0))
+        //Check if the player presses the melee button:
+        if(Input.GetKeyDown(KeyCode.F))
         {
-            if (weaponUp == false)
+            weaponAni.animation.CrossFade("weaponMelee");
+        }
+        //Then we check for the fire input
+	    else if(Input.GetKey(KeyCode.Mouse0))
+        {
+            if (weaponUp == false && !weaponAni.animation.IsPlaying("weaponMelee"))
             {
                 //here we check if the in-game time has surpassed the timeframe where the next bullet is ready
                 if (fireTimer <= Time.timeSinceLevelLoad)
@@ -68,18 +75,21 @@ public class ShootScript : MonoBehaviour {
                     }
                 }
             }
-        } 
+        }
         //Check if the animations weaponIdle and weaponDown is playing. If they arent start playing the idle animation
-        else if (weaponAni.animation.IsPlaying("weaponIdle") == false && weaponUp == false && weaponAni.animation.IsPlaying("weaponDown") == false)
+        else if (weaponAni.animation.IsPlaying("weaponIdle") == false && weaponUp == false && weaponAni.animation.IsPlaying("weaponDown") == false && !weaponAni.animation.IsPlaying("weaponMelee"))
         {
-            //Play the Idle animation
-            weaponAni.animation.Play("weaponIdle");
+            if (weaponAni.animation.IsPlaying("weaponWalk") == false)
+            {
+                //Play the Idle animation
+                weaponAni.animation.Play("weaponIdle");
+            }
         }
         //This is the section where we check if the player is too close to a wall.
         //First we send out a ray from the camera.
         RaycastHit hit2;
         Ray ray2 = mainCam.camera.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2, 0));
-        if (Physics.Raycast(ray2, out hit2))
+        if (Physics.Raycast(ray2, out hit2) && weaponAni.animation.IsPlaying("weaponMelee") == false)
         {
             //Here we check is the player already is close to a wall. If he is, raise the weapon, if he's not lower the weapon
             if (weaponUp == false)
