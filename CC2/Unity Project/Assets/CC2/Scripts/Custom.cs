@@ -55,6 +55,8 @@ public class Custom : MonoBehaviour
 	// Update is called once per frame
     void Start() {
 
+        //Derender alle objecter
+        #region Derender
         Under1.renderer.enabled = false;
         Under2.renderer.enabled = false;
         Under3.renderer.enabled = false;
@@ -70,6 +72,12 @@ public class Custom : MonoBehaviour
         Sight1.renderer.enabled = false;
         Sight2.renderer.enabled = false;
         Sight3.renderer.enabled = false;
+        #endregion
+
+        renderBarrel = Barrel1;
+        renderSight = Sight1;
+        renderMag = Mag1;
+        renderUnder = Under1;
 
     }
 
@@ -80,7 +88,9 @@ public class Custom : MonoBehaviour
         renderMag.renderer.enabled = true;
         renderUnder.renderer.enabled = true;
 
-        switch(intBarrel){
+
+        #region switches
+        switch (intBarrel){
             case 0:
                 renderBarrel = Barrel1;
                 break;
@@ -154,8 +164,9 @@ public class Custom : MonoBehaviour
                 renderUnder = Under1;
                 break;
         }
-	
-	}
+        #endregion
+
+    }
 
     void OnGUI () { 
 
@@ -169,6 +180,8 @@ public class Custom : MonoBehaviour
         {
             intGun = 2;
         }
+
+        #region Attachment Buttons
 
         //Barrel
         if (GUI.Button(new Rect(widthLeft, height1, buttonWidth, buttonHeight), "Barrel 1"))
@@ -233,5 +246,6 @@ public class Custom : MonoBehaviour
         {
             intUnder = 2;
         }
+        #endregion
     }
 }
