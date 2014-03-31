@@ -3,45 +3,61 @@ using System.Collections;
 
 public class Movement : MonoBehaviour 
 {
+    [System.Serializable]
+    public class CrouchVars
+    {
+        public float crouchMovespeed = 2;
+    }
     public float movespeed = 5;
+    private float actualMovespeed = 5;
     private float jumpHeight = 3;
     private float hangTime = -12;
     private Vector3 moveDirection;
     private bool canMove = true;
     private bool jumping = false;
     private bool grounded = false;
+    private bool crouched = false;
+    public float jumpForce = 2;
     private float startPos = 0;
-    //The x-value used in the jump parabola. (y = a*x^2+b*x+c=0) 
-    //(tranform.position.y = hangTime * (x*x) + 0 * x + (transform.position.y + jumpHeight))
-    //x should be the leftmost leg of the parabola.
-    //...which is calculated with this formula: x = (-b - sqrt(b^2-4*a*c))/2*a)
-    private float x = 0;
-    private float D = 0;
+    public CrouchVars crouchvars = new CrouchVars();
+    private GameObject mainCam;
 
     void Start()
     {
-        D = (0 * 0) - (4 * hangTime * jumpHeight);
+        mainCam = Camera.main.gameObject;
+        actualMovespeed = movespeed;
     }
 	void Update () 
     {
         //First we read the input of where the player wants to go.
         moveDirection = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
-        /*
+        //Then we check if the player wants to jump
         if (Input.GetKeyDown(KeyCode.Space) && grounded == true)
         {
-            jumping = true;
-            startPos = transform.position.y;
-            x = -((-0 - Mathf.Sqrt(D)) / (2 * (hangTime)));
-            Debug.Log(x);
+            //Add the jumpforce to the players rigidbody
+            rigidbody.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
         }
-        if (jumping || grounded == false)
+        //Then we apply the position to the player
+        transform.Translate(moveDirection * actualMovespeed * Time.deltaTime, Space.Self);
+
+        #region crouch mechanic
+        if (Input.GetKeyDown(KeyCode.C))
         {
-            x += Time.deltaTime;
-            transform.position = new Vector3(transform.position.x, hangTime * (x * x) + 0 * x + (startPos + jumpHeight), transform.position.z);
-        }*/
-            //Then we apply the position to the player
-            transform.Translate(moveDirection * movespeed * Time.deltaTime, Space.Self);
-	}
+            crouched = !crouched;
+            if (crouched)
+            {
+                actualMovespeed = crouchvars.crouchMovespeed;
+                mainCam.animation.Play("CameraCrouchDown");
+            }
+            else
+            {
+                actualMovespeed = movespeed;
+                mainCam.animation.Play("CameraCrouchUp");
+            }
+            
+        }
+        #endregion
+    }
     void OnCollisionEnter()
     {
         grounded = true;
@@ -58,4 +74,8 @@ public class Movement : MonoBehaviour
     {
         grounded = true;
     }
+}
+static class Global
+{
+    public static int[] cutsomGun = new int[5] { 0, 0, 0, 0, 0 };
 }
