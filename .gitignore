@@ -14,5 +14,4 @@ ehthumbs.db
 *.unityproj
 *.sln
 *.suo
-*.meta
-BattleBots/Unityprojekt/Library/*
+CC2/Unityprojekt/Library/
