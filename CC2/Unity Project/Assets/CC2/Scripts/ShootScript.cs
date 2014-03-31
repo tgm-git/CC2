@@ -48,7 +48,8 @@ public class ShootScript : MonoBehaviour {
                             line.SetPosition(1, hit.point);
                             line.animation.Play();
                             //Then we instantiate a hit effect
-                            Instantiate(impactEffect, hit.point, mainCam.transform.rotation);
+                            GameObject clone = Instantiate(impactEffect, hit.point, Quaternion.identity) as GameObject;
+                            clone.transform.LookAt(hit.point + hit.normal);
                             //AND shake the camera.
                             Hashtable wrd1 = new Hashtable();
                             wrd1.Add("amount", new Vector3(0.5f, 0.5f, 0) * cameraShakeAmount);
