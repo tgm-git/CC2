@@ -26,7 +26,7 @@ public class Movement : MonoBehaviour
     {
         //First we read the input of where the player wants to go.
         moveDirection = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
-
+        /*
         if (Input.GetKeyDown(KeyCode.Space) && grounded == true)
         {
             jumping = true;
@@ -38,7 +38,7 @@ public class Movement : MonoBehaviour
         {
             x += Time.deltaTime;
             transform.position = new Vector3(transform.position.x, hangTime * (x * x) + 0 * x + (startPos + jumpHeight), transform.position.z);
-        }
+        }*/
             //Then we apply the position to the player
             transform.Translate(moveDirection * movespeed * Time.deltaTime, Space.Self);
 	}
