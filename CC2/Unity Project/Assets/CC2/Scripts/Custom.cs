@@ -107,7 +107,6 @@ public class Custom : MonoBehaviour
 
             case 3:
                 renderBarrel.renderer.enabled = false;
-                Derender();
                 break;
 
             default:
@@ -135,7 +134,6 @@ public class Custom : MonoBehaviour
 
             case 3:
                 renderMag.renderer.enabled = false;
-                Derender();
                 break;
 
             default:
@@ -163,7 +161,6 @@ public class Custom : MonoBehaviour
 
             case 3:
                 renderSight.renderer.enabled = false;
-                Derender();
                 break;
 
             default:
@@ -191,7 +188,6 @@ public class Custom : MonoBehaviour
 
             case 3:
                 renderUnder.renderer.enabled = false;
-                Derender();
                 break;
 
             default:
@@ -216,6 +212,11 @@ public class Custom : MonoBehaviour
         if (GUI.Button(new Rect(width2, height0, buttonWidth, buttonHeight), "AR"))
         {
             intGun = 2;
+        }
+
+        if (GUI.Button(new Rect(width3, height0, buttonWidth, buttonHeight), "Exit to Menu"))
+        {
+            Application.LoadLevel("LobbyScene");
         }
 
         //all buttons for the attachments
