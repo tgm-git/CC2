@@ -9,22 +9,22 @@ public class Movement : MonoBehaviour
         public float crouchMovespeed = 2;
     }
     public float movespeed = 5;
+    public float sprintSpeed = 10;
     private float actualMovespeed = 5;
-    private float jumpHeight = 3;
-    private float hangTime = -12;
     private Vector3 moveDirection;
     private bool canMove = true;
     private bool jumping = false;
     private bool grounded = false;
     private bool crouched = false;
     public float jumpForce = 2;
-    private float startPos = 0;
     public CrouchVars crouchvars = new CrouchVars();
     private GameObject mainCam;
     public Animation weaponAni;
     public Animation cameraAni;
     public float walkAniSpeed = 0.8f;
     private ShootScript shootScript;
+    [System.NonSerialized]
+    public bool sprinting = false;
 
     void Start()
     {
@@ -43,19 +43,40 @@ public class Movement : MonoBehaviour
             //Add the jumpforce to the players rigidbody
             rigidbody.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
         }
+        if (Input.GetKeyDown(KeyCode.LeftShift) && grounded == true)
+        {
+            sprinting = true;
+            actualMovespeed = sprintSpeed;
+        }
+        else if (Input.GetKeyUp(KeyCode.LeftShift) && grounded == true)
+        {
+            sprinting = false;
+            actualMovespeed = movespeed;
+        }
         //Then we apply the position to the player
         transform.Translate(moveDirection * actualMovespeed * Time.deltaTime, Space.Self);
         #region animation
         //Walk animation
         if(moveDirection.magnitude > 0)
         {
-            if (!weaponAni.IsPlaying("weaponRecoil") && !weaponAni.IsPlaying("weaponWalk") && !weaponAni.IsPlaying("weaponDown") && !shootScript.weaponUp && !weaponAni.IsPlaying("weaponMelee"))
+            if (sprinting == false)
             {
-                weaponAni.CrossFade("weaponWalk");
+                if (!weaponAni.IsPlaying("weaponSprint") && !weaponAni.IsPlaying("weaponRecoil") && !weaponAni.IsPlaying("weaponWalk") && !weaponAni.IsPlaying("weaponDown") && !shootScript.weaponUp && !weaponAni.IsPlaying("weaponMelee"))
+                {
+                    weaponAni.CrossFade("weaponWalk");
+                }
+                if (!cameraAni.IsPlaying("CameraWalk"))
+                {
+                    cameraAni.CrossFade("CameraWalk");
+                }
             }
-            if(!cameraAni.IsPlaying("CameraWalk"))
+            else if (sprinting == true)
             {
-                cameraAni.CrossFade("CameraWalk");
+                if (!weaponAni.IsPlaying("weaponMelee"))
+                {
+                    weaponAni.CrossFade("weaponSprint", 0.3f);
+                    cameraAni.CrossFade("CameraSprint", 0.3f);
+                }
             }
         }
         else if(moveDirection.magnitude <= 0)
@@ -72,7 +93,8 @@ public class Movement : MonoBehaviour
         //In air stuff
         if(grounded == false)
         {
-
+            sprinting = false;
+            actualMovespeed = movespeed;
         }
         #endregion
 
