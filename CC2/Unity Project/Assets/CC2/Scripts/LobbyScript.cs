@@ -16,10 +16,15 @@ public class LobbyScript : MonoBehaviour {
     int widthLeft = Screen.width / 6;
     int widthMid = Screen.width / 4;
     int widthRight = Screen.width / 3;
+
+    //Temporary things
+    private string ip = "localHost";
 	
 	// Update is called once per frame
-	void OnGUI () {
-        if (GUI.Button(new Rect(Screen.width / 2 - (buttonWidth / 2), Screen.height / 2.4F - (buttonHeight / 2), buttonWidth, buttonHeight), "Start Game")) {
+    void OnGUI()
+    {
+        if (GUI.Button(new Rect(Screen.width / 2 - (buttonWidth / 2), Screen.height / 2.4F - (buttonHeight / 2), buttonWidth, buttonHeight), "Start Game"))
+        {
             Application.LoadLevel("MovementTest");
         }
 
@@ -32,5 +37,23 @@ public class LobbyScript : MonoBehaviour {
         {
             Application.Quit();
         }
-	}
+        #region Temporary things
+        if (GUI.Button(new Rect(Screen.width - 150, 50, 100, 45), "Start Server"))
+        {
+            Network.InitializeServer(7, 8500, false);
+        }
+        if (GUI.Button(new Rect(Screen.width - 150, 100, 100, 45), "Join Game"))
+        {
+            Network.Connect(ip, 8500);
+        }
+        #endregion
+    }
+    void OnConnectedToServer()
+    {
+        Application.LoadLevel("");
+    }
+    void OnServerInitialized()
+    {
+        Application.LoadLevel("");
+    }
 }

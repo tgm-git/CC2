@@ -14,13 +14,16 @@ public class ShootScript : MonoBehaviour {
     private Transform mainCam;
     public float acurracy = 0.02f;
     public float cameraShakeAmount = 0.1f;
+    private AudioSource firingMusic;
 
 	void Start () 
     {
         //Hide and lock the mouse cursor
         Screen.lockCursor = true;
         Screen.showCursor = false;
+        //Assign some variables for later use
         mainCam = Camera.main.transform;
+        firingMusic = GameObject.FindGameObjectWithTag("Player").GetComponent<AudioSource>();
 	}
 	void Update () 
     {
