@@ -111,6 +111,7 @@ public class ShootScript : MonoBehaviour {
                 if (Vector3.Distance(mainCam.transform.position, hit2.point) <= 2)
                 {
                     weaponAni.animation.Play("weaponUp");
+                    moveScript.sprinting = false;
                     weaponUp = true;
                 }
             }
