@@ -48,157 +48,19 @@ public class Custom : MonoBehaviour
     //End of "Assing inspector"
     #endregion
 
-    //Ints designate which part is to be rendered
-    int intBarrel = 0;
-    int intMag = 0;
-    int intSight = 0;
-    int intUnder = 0;
-    int intGun = 0;
 	
 	// Update is called once per frame
     void Start() {
 
-        //Derender alle objecter
-        #region Derender
-        Under1.renderer.enabled = false;
-        Under2.renderer.enabled = false;
-        Under3.renderer.enabled = false;
-
-        Barrel1.renderer.enabled = false;
-        Barrel2.renderer.enabled = false;
-        Barrel3.renderer.enabled = false;
-
-        Mag1.renderer.enabled = false;
-        Mag2.renderer.enabled = false;
-        Mag3.renderer.enabled = false;
-
-        Sight1.renderer.enabled = false;
-        Sight2.renderer.enabled = false;
-        Sight3.renderer.enabled = false;
-        #endregion
-
-        //dafaulting which objects to render to make sure there is a object to render
+        //Default Attachments
         renderBarrel = Barrel1;
-        renderSight = Sight1;
         renderMag = Mag1;
+        renderSight = Sight1;
         renderUnder = Under1;
+
+        //Derender alle objecter
+        Derender();
         
-    }
-
-	void Update () {
-
-        //Switch statments som afhænger af nogle intergers længere oppe
-        #region switches
-        switch (intBarrel){
-            case 0:
-                renderBarrel = Barrel1;
-                Derender();
-                break;
-
-            case 1:
-                renderBarrel = Barrel2;
-                Derender();
-                break;
-
-            case 2:
-                renderBarrel = Barrel3;
-                Derender();
-                break;
-
-            case 3:
-                renderBarrel.renderer.enabled = false;
-                break;
-
-            default:
-                renderBarrel = Barrel1;
-                Derender();
-                break;
-        }
-
-        switch (intMag)
-        {
-            case 0:
-                renderMag = Mag1;
-                Derender();
-                break;
-
-            case 1:
-                renderMag = Mag2;
-                Derender();
-                break;
-
-            case 2:
-                renderMag = Mag3;
-                Derender();
-                break;
-
-            case 3:
-                renderMag.renderer.enabled = false;
-                break;
-
-            default:
-                renderMag = Mag1;
-                Derender();
-                break;
-        }
-
-        switch (intSight)
-        {
-            case 0:
-                renderSight = Sight1;
-                Derender();
-                break;
-
-            case 1:
-                renderSight = Sight2;
-                Derender();
-                break;
-
-            case 2:
-                renderSight = Sight3;
-                Derender();
-                break;
-
-            case 3:
-                renderSight.renderer.enabled = false;
-                break;
-
-            default:
-                renderSight = Sight1;
-                Derender();
-                break;
-        }
-
-        switch (intUnder)
-        {
-            case 0:
-                renderUnder = Under1;
-                Derender();
-                break;
-
-            case 1:
-                renderUnder = Under2;
-                Derender();
-                break;
-
-            case 2:
-                renderUnder = Under3;
-                Derender();
-                break;
-
-            case 3:
-                renderUnder.renderer.enabled = false;
-                break;
-
-            default:
-                renderUnder = Under1;
-                Derender();
-                break;
-        }
-        #endregion
-
-
-
     }
 
     void OnGUI () { 
@@ -206,12 +68,14 @@ public class Custom : MonoBehaviour
         //Guns
         if (GUI.Button(new Rect(width1, height0, buttonWidth, buttonHeight), "CR"))
         {
-            intGun = 0;
+            //render gun
+            Derender();
         }
 
         if (GUI.Button(new Rect(width2, height0, buttonWidth, buttonHeight), "AR"))
         {
-            intGun = 2;
+            //render gun
+            Derender();
         }
 
         if (GUI.Button(new Rect(width3, height0, buttonWidth, buttonHeight), "Exit to Menu"))
@@ -226,22 +90,26 @@ public class Custom : MonoBehaviour
         #region
         if (GUI.Button(new Rect(width1, height1, buttonWidth, buttonHeight), "Barrel 1"))
         {
-            intBarrel = 0;
+            renderBarrel = Barrel1;
+            Derender();
         }
 
         if (GUI.Button(new Rect(width1, height2, buttonWidth, buttonHeight), "Barrel 2"))
         {
-            intBarrel = 1;
+            renderBarrel = Barrel2;
+            Derender();
         }
 
         if (GUI.Button(new Rect(width1, height3, buttonWidth, buttonHeight), "Barrel 3"))
         {
-            intBarrel = 2;
+            renderBarrel = Barrel3;
+            Derender();
         }
 
         if (GUI.Button(new Rect(width1, height4, buttonWidth, buttonHeight), "None"))
         {
-            intBarrel = 3;
+            renderBarrel = null;
+            Derender();
         }
         #endregion
 
@@ -249,22 +117,26 @@ public class Custom : MonoBehaviour
         #region
         if (GUI.Button(new Rect(width2, height1, buttonWidth, buttonHeight), "Sight 1"))
         {
-            intSight = 0;
+            renderSight = Sight1;
+            Derender();
         }
 
         if (GUI.Button(new Rect(width2, height2, buttonWidth, buttonHeight), "Sight 2"))
         {
-            intSight = 1;
+            renderSight = Sight2;
+            Derender();
         }
 
         if (GUI.Button(new Rect(width2, height3, buttonWidth, buttonHeight), "Sight 3"))
         {
-            intSight = 2;
+            renderSight = Sight3;
+            Derender();
         }
 
         if (GUI.Button(new Rect(width2, height4, buttonWidth, buttonHeight), "None"))
         {
-            intSight = 3;
+            renderSight = null;
+            Derender();
         }
         #endregion
 
@@ -272,22 +144,26 @@ public class Custom : MonoBehaviour
         #region
         if (GUI.Button(new Rect(width3, height1, buttonWidth, buttonHeight), "Mag 1"))
         {
-            intMag = 0;
+            renderMag = Mag1;
+            Derender();
         }
 
         if (GUI.Button(new Rect(width3, height2, buttonWidth, buttonHeight), "Mag 2"))
         {
-            intMag = 1;
+            renderMag = Mag2;
+            Derender();
         }
 
         if (GUI.Button(new Rect(width3, height3, buttonWidth, buttonHeight), "Mag 3"))
         {
-            intMag = 2;
+            renderMag = Mag3;
+            Derender();
         }
 
         if (GUI.Button(new Rect(width3, height4, buttonWidth, buttonHeight), "None"))
         {
-            intMag = 4;
+            renderMag = null;
+            Derender();
         }
         #endregion
 
@@ -295,22 +171,27 @@ public class Custom : MonoBehaviour
         #region
         if (GUI.Button(new Rect(width4, height1, buttonWidth, buttonHeight), "Under 1"))
         {
-            intUnder = 0;
+            renderUnder = Under1;
+            Derender();
+
         }
 
         if (GUI.Button(new Rect(width4, height2, buttonWidth, buttonHeight), "Under 2"))
         {
-            intUnder = 1;
+            renderUnder = Under2;
+            Derender();
         }
 
         if (GUI.Button(new Rect(width4, height3, buttonWidth, buttonHeight), "Under 3"))
         {
-            intUnder = 2;
+            renderUnder = Under3;
+            Derender();
         }
 
         if (GUI.Button(new Rect(width4, height4, buttonWidth, buttonHeight), "None"))
         {
-            intUnder = 3;
+            renderUnder = null;
+            Derender();
         }
         #endregion
 
@@ -339,9 +220,23 @@ public class Custom : MonoBehaviour
         #endregion
 
         //renderer de korrekte objekter hele tiden
-        renderBarrel.renderer.enabled = true;
-        renderSight.renderer.enabled = true;
-        renderMag.renderer.enabled = true;
-        renderUnder.renderer.enabled = true;
+        if(renderBarrel != null){
+            renderBarrel.renderer.enabled = true;
+        }
+
+        if(renderSight != null)
+        {
+            renderSight.renderer.enabled = true;
+        }
+
+        if(renderMag != null)
+        {
+            renderMag.renderer.enabled = true;
+        }
+         
+        if(renderUnder != null)
+        {
+            renderUnder.renderer.enabled = true;
+        }
     }
 }
