@@ -111,18 +111,21 @@ public class ShootScript : MonoBehaviour {
                 if (Vector3.Distance(mainCam.transform.position, hit2.point) <= 2)
                 {
                     weaponAni.animation.Play("weaponUp");
+                    
                     moveScript.sprinting = false;
                     weaponUp = true;
                 }
             }
-            else
+            else if(weaponUp == true)
             {
                 if (Vector3.Distance(mainCam.transform.position, hit2.point) > 2)
                 {
                     weaponAni.animation.CrossFade("weaponDown");
+
                     weaponUp = false;
                 }
             }
+            Debug.Log(weaponUp.ToString() + (Vector3.Distance(mainCam.transform.position, hit2.point) > 2 ? @">2" : @"<2"));
         }
         
         //Here I check for input to the soundeffects
