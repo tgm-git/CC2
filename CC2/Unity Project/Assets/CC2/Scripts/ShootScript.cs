@@ -3,6 +3,12 @@ using System.Collections;
 
 public class ShootScript : MonoBehaviour {
 
+    public enum Team
+    {
+        Red,
+        Blue
+    }
+    public Team team = new Team();
     public Texture2D crosshair;
     public GameObject impactEffect;
     public GameObject weaponAni;
@@ -36,7 +42,7 @@ public class ShootScript : MonoBehaviour {
         Screen.showCursor = false;
         //Assign some variables for later use
         mainCam = Camera.main.transform;
-        firingMusic = GameObject.FindGameObjectWithTag("Player").GetComponent<AudioSource>();
+        firingMusic = GetComponent<AudioSource>();
         moveScript = GetComponent<Movement>();
 	}
 	void Update () 
@@ -101,32 +107,31 @@ public class ShootScript : MonoBehaviour {
         }
         //This is the section where we check if the player is too close to a wall.
         //First we send out a ray from the camera.
-        RaycastHit hit2;
-        Ray ray2 = mainCam.camera.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2, 0));
-        if (Physics.Raycast(ray2, out hit2) && weaponAni.animation.IsPlaying("weaponMelee") == false)
-        {
-            //Here we check is the player already is close to a wall. If he is, raise the weapon, if he's not lower the weapon
-            if (weaponUp == false)
-            {
-                if (Vector3.Distance(mainCam.transform.position, hit2.point) <= 2)
-                {
-                    weaponAni.animation.Play("weaponUp");
+        //RaycastHit hit2;
+        //Ray ray2 = mainCam.camera.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2, 0));
+        //if (Physics.Raycast(ray2, out hit2) && weaponAni.animation.IsPlaying("weaponMelee") == false)
+        //{
+        //    //Here we check is the player already is close to a wall. If he is, raise the weapon, if he's not lower the weapon
+        //    if (weaponUp == false)
+        //    {
+        //        if (Vector3.Distance(mainCam.transform.position, hit2.point) <= 2)
+        //        {
+        //            weaponAni.animation.Play("weaponUp");
                     
-                    moveScript.sprinting = false;
-                    weaponUp = true;
-                }
-            }
-            else if(weaponUp == true)
-            {
-                if (Vector3.Distance(mainCam.transform.position, hit2.point) > 2)
-                {
-                    weaponAni.animation.CrossFade("weaponDown");
+        //            moveScript.sprinting = false;
+        //            weaponUp = true;
+        //        }
+        //    }
+        //    else if(weaponUp == true)
+        //    {
+        //        if (Vector3.Distance(mainCam.transform.position, hit2.point) > 2)
+        //        {
+        //            weaponAni.animation.CrossFade("weaponDown");
 
-                    weaponUp = false;
-                }
-            }
-            Debug.Log(weaponUp.ToString() + (Vector3.Distance(mainCam.transform.position, hit2.point) > 2 ? @">2" : @"<2"));
-        }
+        //            weaponUp = false;
+        //        }
+        //    }
+        //}
         
         //Here I check for input to the soundeffects
         if (Input.GetKeyDown(KeyCode.Mouse0))

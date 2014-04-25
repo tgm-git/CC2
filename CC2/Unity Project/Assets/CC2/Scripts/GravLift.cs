@@ -6,7 +6,7 @@ public class GravLift : MonoBehaviour
     public float force = 10;
     void OnTriggerEnter(Collider intruder)
     {
-        if (intruder.transform.tag == "Player")
+        if (intruder.transform.tag == "Player" || intruder.transform.tag == "Red" || intruder.transform.tag == "Blue")
         {
             intruder.rigidbody.velocity = Vector3.zero;
             Vector3 dir = transform.forward + (Vector3.up / 2);
