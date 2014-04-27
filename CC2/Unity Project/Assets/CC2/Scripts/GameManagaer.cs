@@ -8,20 +8,12 @@ public class GameManagaer : MonoBehaviour {
     public Camera turnOffWhenSpawn;
     public GameObject redPlayer;    //Lokal version
     public GameObject bluePlayer;   //Lokal version
-    public GameObject redClone;     //Ghost version
-    public GameObject blueClone;    //Ghost version
     //En liste over alle spillere i spillet
     private List<GameObject> allPlayers = new List<GameObject>();
     private int[] playerScore = new int[1];
     //De forskellige spawnpoints
     private Transform[] redSpawnpoints;
     private Transform[] blueSpawnpoints;
-    private int playingPlayers = 0;
-    public class playerID
-    {
-        int ID = 0;
-    }
-    private List<playerID> playerIDs = new List<playerID>();
 
     private bool selectedTeam = false;
 

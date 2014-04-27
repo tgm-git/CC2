@@ -202,6 +202,7 @@ public class ShootScript : MonoBehaviour {
         {
             mainCam.gameObject.SetActive(false);
             rigidbody.isKinematic = true;
+            audio.enabled = false;
         }
         else if (networkView.isMine == true)
         {

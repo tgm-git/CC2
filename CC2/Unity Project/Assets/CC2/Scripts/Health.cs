@@ -3,8 +3,12 @@ using System.Collections;
 
 public class Health : MonoBehaviour 
 {
+    public Texture2D healthTex;
+    public Texture2D shieldTex;
+    public Texture2D healthBG;
     private float health = 100;
     private float shield = 0;
+    public float maxShield = 200;
     public float maxHealth = 100;
     public GameObject shieldPrefb;
     public GameObject shieldBurst;
@@ -70,6 +74,16 @@ public class Health : MonoBehaviour
     }
     void OnGUI()
     {
-
+        if(networkView.isMine == false)
+        {
+            if (Camera.main != null)
+            {
+                Vector3 pos = Camera.main.WorldToScreenPoint(new Vector3(transform.position.x, transform.position.y + 1.2f, transform.position.z));
+                GUI.DrawTexture(new Rect(pos.x - 52, Screen.height - pos.y - 12, 104, 14), healthBG);
+                GUI.DrawTexture(new Rect(pos.x - 50, Screen.height - pos.y - 10, health, 10), healthTex);
+                GUI.DrawTexture(new Rect(pos.x - 52, Screen.height - pos.y - 22, 104, 14), healthBG);
+                GUI.DrawTexture(new Rect(pos.x - 50, Screen.height - pos.y - 20, (shield / maxShield) * 100, 10), shieldTex);
+            }
+        }
     }
 }
