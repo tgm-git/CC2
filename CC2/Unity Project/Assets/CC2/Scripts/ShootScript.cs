@@ -33,6 +33,7 @@ public class ShootScript : MonoBehaviour {
     private bool firing = false;
     private float timer = 0;
     private Movement moveScript;
+    public float damage = 4;
     //private float volTimer = 0;
 
 	void Start () 
@@ -96,6 +97,14 @@ public class ShootScript : MonoBehaviour {
                                 wrd1.Add("isLocal", true);
                                 wrd1.Add("time", 0.2f);
                                 iTween.ShakePosition(mainCam.gameObject, wrd1);
+
+                                #region HitDetection
+                                if (hit.transform.tag == "Player" || hit.transform.tag == "Red" || hit.transform.tag == "Blue")
+                                {
+                                    Health hp = hit.transform.gameObject.GetComponent<Health>();
+                                    hp.AdjustHealth(-damage);
+                                }
+                                #endregion
                             }
                             //Then we animate some recoil on the weaponmesh
                             if (weaponAni.animation.IsPlaying("weaponRecoil") == false)
