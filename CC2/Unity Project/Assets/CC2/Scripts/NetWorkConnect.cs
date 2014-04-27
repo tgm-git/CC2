@@ -36,6 +36,14 @@ public class NetWorkConnect : MonoBehaviour
             Network.Connect(connectIP, connectPort);
         }
 
+        connectIP = GUI.TextField(new Rect(130, 30, 120, 20), connectIP);
+        try {
+            connectPort = int.Parse(GUI.TextField(new Rect(130, 55, 120, 20), connectPort.ToString()));
+        }catch{
+            connectPort = 25001;
+        }
+        
+
         if (GUI.Button(new Rect(10, 55, 120, 20), "Initialize Server"))
         {
             Network.InitializeServer(32, connectPort, false);
