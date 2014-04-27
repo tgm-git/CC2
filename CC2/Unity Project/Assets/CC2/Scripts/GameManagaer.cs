@@ -14,7 +14,8 @@ public class GameManagaer : MonoBehaviour {
     //De forskellige spawnpoints
     private Transform[] redSpawnpoints;
     private Transform[] blueSpawnpoints;
-
+    private float counter = 3;
+    private bool death = false;
     private bool selectedTeam = false;
 
 	void Start () 
@@ -35,6 +36,10 @@ public class GameManagaer : MonoBehaviour {
 	}
     void OnGUI()
     {
+        if (death)
+        {
+            GUI.Label(new Rect(Screen.width / 2 - 50, Screen.height / 2 - 10, 100, 20), counter.ToString());
+        }
         if (selectedTeam == false)
         {
             //Spilleren har 2 muligheder til at starte med:
@@ -82,12 +87,27 @@ public class GameManagaer : MonoBehaviour {
     {
 
     }
-    public void KillPlayer(NetworkViewID player, GameObject you)
+    public void KillPlayer(GameObject player, NetworkPlayer you, bool isRed)
     {
-        you.networkView.RPC("Die", RPCMode.All);
+        Network.Destroy(player);
+        counter = 3;
+        death = true;
+        camera.enabled = true;
+        StartCoroutine(RespawnDeath(you, isRed));
     }
-    IEnumerator RespawnDeath(NetworkViewID player)
+    IEnumerator RespawnDeath(NetworkPlayer you, bool isRed)
     {
-        yield return new WaitForSeconds(5);
+        yield return new WaitForSeconds(3);
+        death = false;
+        camera.enabled = false;
+        Vector3 spawnPoint = isRed == true ? GameObject.FindGameObjectWithTag("SpawnRed").transform.position : GameObject.FindGameObjectWithTag("SpawnBlue").transform.position;
+        Network.Instantiate(isRed == true ? redPlayer : bluePlayer, spawnPoint, Quaternion.identity, 0);
+    }
+    void Update()
+    {
+        if(death == true)
+        {
+            counter -= Time.deltaTime;
+        }
     }
 }
