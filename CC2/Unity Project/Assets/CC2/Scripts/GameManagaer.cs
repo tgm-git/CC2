@@ -33,10 +33,6 @@ public class GameManagaer : MonoBehaviour {
             blueSpawnpoints[i] = objs[i].transform;
         }
 	}
-    void Update() 
-    {
-	    
-	}
     void OnGUI()
     {
         if (selectedTeam == false)
@@ -85,5 +81,13 @@ public class GameManagaer : MonoBehaviour {
     public void TellPlayerID(int ID)
     {
 
+    }
+    public void KillPlayer(NetworkViewID player, GameObject you)
+    {
+        you.networkView.RPC("Die", RPCMode.All);
+    }
+    IEnumerator RespawnDeath(NetworkViewID player)
+    {
+        yield return new WaitForSeconds(5);
     }
 }
