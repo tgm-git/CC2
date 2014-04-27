@@ -50,10 +50,20 @@ public class LobbyScript : MonoBehaviour {
     }
     void OnConnectedToServer()
     {
-        Application.LoadLevel("");
+        //Application.LoadLevel(3);
     }
     void OnServerInitialized()
     {
-        Application.LoadLevel("");
+        //Application.LoadLevel(3);
+    }
+    void OnPlayerConnected()
+    {
+        networkView.RPC("LoadMap", RPCMode.Others);
+        LoadMap();
+    }
+    [RPC]
+    void LoadMap()
+    {
+        Application.LoadLevel(3);
     }
 }

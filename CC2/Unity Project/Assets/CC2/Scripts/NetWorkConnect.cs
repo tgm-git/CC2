@@ -49,9 +49,9 @@ public class NetWorkConnect : MonoBehaviour
         if (connectedBo == true)
         {
 
-            if (GUI.Button(new Rect(10, 80, 120, 20), "Start Game"))
+            if (GUI.Button(new Rect(10, 80, 120, 20), "Join Game"))
             {
-                Application.LoadLevel(1);
+                Application.LoadLevel(3);
             }
 
             if (GUI.Button(new Rect(10, 105, 120, 20), "Disconnect"))

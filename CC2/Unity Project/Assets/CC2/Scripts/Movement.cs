@@ -25,6 +25,7 @@ public class Movement : MonoBehaviour
     private ShootScript shootScript;
     [System.NonSerialized]
     public bool sprinting = false;
+    private Vector3 lastPos = Vector3.zero;
 
     void Start()
     {
@@ -35,102 +36,123 @@ public class Movement : MonoBehaviour
     }
 	void Update () 
     {
-        //First we read the input of where the player wants to go.
-        moveDirection = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
-        //Then we check if the player wants to jump
-        if (Input.GetKeyDown(KeyCode.Space) && grounded == true)
+        if (networkView.isMine)
         {
-            //Add the jumpforce to the players rigidbody
-            rigidbody.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
-        }
-        if (Input.GetKeyDown(KeyCode.LeftShift) && grounded == true)
-        {
-            sprinting = true;
-            actualMovespeed = sprintSpeed;
-        }
-        else if (Input.GetKeyUp(KeyCode.LeftShift) && grounded == true)
-        {
-            sprinting = false;
-            actualMovespeed = movespeed;
-        }
-        //Then we apply the position to the player
-        transform.Translate(moveDirection * actualMovespeed * Time.deltaTime, Space.Self);
-        #region animation
-        //Walk animation
-        if(moveDirection.magnitude > 0)
-        {
-            if (sprinting == false)
+            //First we read the input of where the player wants to go.
+            moveDirection = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
+            //Then we check if the player wants to jump
+            if (Input.GetKeyDown(KeyCode.Space) && grounded == true)
             {
-                if (!weaponAni.IsPlaying("weaponSprint") && !weaponAni.IsPlaying("weaponRecoil") && !weaponAni.IsPlaying("weaponWalk") && !weaponAni.IsPlaying("weaponDown") && !shootScript.weaponUp && !weaponAni.IsPlaying("weaponMelee"))
-                {
-                    weaponAni.CrossFade("weaponWalk");
-                }
-                if (!cameraAni.IsPlaying("CameraWalk"))
-                {
-                    cameraAni.CrossFade("CameraWalk");
-                }
+                //Add the jumpforce to the players rigidbody
+                rigidbody.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
             }
-            else if (sprinting == true)
+            if (Input.GetKeyDown(KeyCode.LeftShift) && grounded == true)
             {
-                if (!weaponAni.IsPlaying("weaponMelee"))
-                {
-                    weaponAni.CrossFade("weaponSprint", 0.3f);
-                    cameraAni.CrossFade("CameraSprint", 0.3f);
-                }
+                sprinting = true;
+                actualMovespeed = sprintSpeed;
             }
-        }
-        else if(moveDirection.magnitude <= 0)
-        {
-            if (weaponAni.IsPlaying("weaponWalk") && weaponAni.IsPlaying("weaponJumpInAir") == false && !weaponAni.IsPlaying("weaponMelee"))
+            else if (Input.GetKeyUp(KeyCode.LeftShift) && grounded == true)
             {
-                weaponAni.CrossFade("weaponIdle");
-            }
-            if(cameraAni.IsPlaying("CameraWalk") == true)
-            {
-                cameraAni.CrossFade("CameraIdle");
-            }
-        }
-        //In air stuff
-        if(grounded == false)
-        {
-            sprinting = false;
-            actualMovespeed = movespeed;
-        }
-        #endregion
-
-        #region crouch mechanic
-        if (Input.GetKeyDown(KeyCode.C))
-        {
-            crouched = !crouched;
-            if (crouched)
-            {
-                actualMovespeed = crouchvars.crouchMovespeed;
-                mainCam.animation.Play("CameraCrouchDown");
-            }
-            else
-            {
+                sprinting = false;
                 actualMovespeed = movespeed;
-                mainCam.animation.Play("CameraCrouchUp");
             }
-            
+            //Then we apply the position to the player
+            transform.Translate(moveDirection * actualMovespeed * Time.deltaTime, Space.Self);
+            #region animation
+            //Walk animation
+            if (moveDirection.magnitude > 0)
+            {
+                if (sprinting == false)
+                {
+                    if (!weaponAni.IsPlaying("weaponSprint") && !weaponAni.IsPlaying("weaponRecoil") && !weaponAni.IsPlaying("weaponWalk") && !weaponAni.IsPlaying("weaponDown") && !shootScript.weaponUp && !weaponAni.IsPlaying("weaponMelee"))
+                    {
+                        weaponAni.CrossFade("weaponWalk");
+                    }
+                    if (!cameraAni.IsPlaying("CameraWalk"))
+                    {
+                        cameraAni.CrossFade("CameraWalk");
+                    }
+                }
+                else if (sprinting == true)
+                {
+                    if (!weaponAni.IsPlaying("weaponMelee"))
+                    {
+                        weaponAni.CrossFade("weaponSprint", 0.3f);
+                        cameraAni.CrossFade("CameraSprint", 0.3f);
+                    }
+                }
+            }
+            else if (moveDirection.magnitude <= 0)
+            {
+                if (weaponAni.IsPlaying("weaponWalk") && weaponAni.IsPlaying("weaponJumpInAir") == false && !weaponAni.IsPlaying("weaponMelee"))
+                {
+                    weaponAni.CrossFade("weaponIdle");
+                }
+                if (cameraAni.IsPlaying("CameraWalk") == true)
+                {
+                    cameraAni.CrossFade("CameraIdle");
+                }
+            }
+            //In air stuff
+            if (grounded == false)
+            {
+                sprinting = false;
+                actualMovespeed = movespeed;
+            }
+            #endregion
+
+            #region crouch mechanic
+            if (Input.GetKeyDown(KeyCode.C))
+            {
+                crouched = !crouched;
+                if (crouched)
+                {
+                    actualMovespeed = crouchvars.crouchMovespeed;
+                    mainCam.animation.Play("CameraCrouchDown");
+                }
+                else
+                {
+                    actualMovespeed = movespeed;
+                    mainCam.animation.Play("CameraCrouchUp");
+                }
+
+            }
+            #endregion
+
+            //Tell everyone alse on the network where the player is and in order to not spam the server
+            //the player has to travel at least 0.05 meters before updating its position
+            if(Network.connections.Length > 0 && Vector3.Distance(lastPos, transform.position) > 0.05f)
+            {
+                networkView.RPC("UpdatePosition", RPCMode.Others, transform.position);
+                lastPos = transform.position;
+            }
         }
-        #endregion
+    }
+    [RPC]
+    public void UpdatePosition(Vector3 newPos)
+    {
+        transform.position = newPos;
     }
     void OnCollisionEnter()
     {
-        grounded = true;
-        if (jumping == true)
+        if (networkView.isMine)
         {
-            jumping = false;
+            grounded = true;
+            if (jumping == true)
+            {
+                jumping = false;
+            }
         }
     }
     void OnCollisionExit()
     {
-        grounded = false;
+        if (networkView.isMine)
+            grounded = false;
     }
     void OnCollisionStay()
     {
-        grounded = true;
+        if (networkView.isMine)
+            grounded = true;
     }
 }
 static class Global

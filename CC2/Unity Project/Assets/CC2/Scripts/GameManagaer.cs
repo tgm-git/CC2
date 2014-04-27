@@ -76,20 +76,22 @@ public class GameManagaer : MonoBehaviour {
     [RPC]
     public void SpawnNewPlayerClone(bool isRed, Vector3 spawnPoint)
     {
-        //Fordi jeg spawner en af de andre spillere, vil jeg gerne have styr på hvem de er. Derfor får der hver især 
-        //et tal alt efter hvornår de kom ind i lobbyen. Dette er dog kun serveren der har brug for denne information
-        //Da det kun er serveren, som kan styre hvor ghostsne er henne
-        if(Network.isServer)
-        {
-            GameObject clone = Instantiate(isRed == true ? redClone : blueClone, spawnPoint, Quaternion.identity)as GameObject;
+        
 
-        }
     }
     void SpawnNewPlayerLocal(bool isRed, Vector3 spawnPoint)
     {
         //Jeg spawner den lokale version.
-        Instantiate(isRed == true ? redPlayer : bluePlayer, spawnPoint, Quaternion.identity);
+        //Instantiate(isRed == true ? redPlayer : bluePlayer, spawnPoint, Quaternion.identity);
         //..Og jeg siger til alle andre på netværket end mig at de skal spawne en klon af den nye spiller.
-        networkView.RPC("SpawnNewPlayerClone", RPCMode.Others, isRed, spawnPoint);
+        //Fordi jeg spawner en af de andre spillere, vil jeg gerne have styr på hvem de er. Derfor får der hver især 
+        //et tal alt efter hvornår de kom ind i lobbyen.
+        GameObject clone = Network.Instantiate(isRed == true ? redPlayer : bluePlayer, spawnPoint, Quaternion.identity, 0) as GameObject;
+        allPlayers.Add(clone);
+    }
+    [RPC]
+    public void TellPlayerID(int ID)
+    {
+
     }
 }
