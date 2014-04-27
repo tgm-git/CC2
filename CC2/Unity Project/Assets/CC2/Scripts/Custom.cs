@@ -3,7 +3,8 @@ using System.Collections;
 
 public class Custom : MonoBehaviour
 {
-
+    //Disse GameObjects bliver brugt til rendering. 
+    //Når spilleren ændre hvilke vedhæftninger han/hun ønsker vist så bliver det nyvalgte GameObject sat lig med et af disse GameObjects for at blive vist.
     [System.NonSerialized]
     public GameObject renderBarrel;
     [System.NonSerialized]
@@ -13,21 +14,24 @@ public class Custom : MonoBehaviour
     [System.NonSerialized]
     public GameObject renderUnder;
 
-    //variables
+    //Dette er højden og breden på knapperne
     int buttonHeight = 50;
     int buttonWidth = 150;
 
+    //Dette er nogle standard højde positioner, som bliver brugt til at holde knapperne på line
     float height0 = Screen.height * 0.32F;
     float height1 = Screen.height * 0.4F;
     float height2 = Screen.height * 0.46F;
     float height3 = Screen.height * 0.52F;
     float height4 = Screen.height * 0.58F;
 
+    //Dette er nogle standard brede positioner, som bliver brugt til at holde knapperne på række
     float width1 = Screen.width / 6;
     float width2 = Screen.width / 4;
     float width3 = Screen.width / 3;
     float width4 = Screen.width / 2.4F; 
 
+    //Dette er alle vedhæftningerne til våbentet
     //Assign in inspector
     #region GameObjects
     public GameObject Mag1;
@@ -48,18 +52,17 @@ public class Custom : MonoBehaviour
     //End of "Assing inspector"
     #endregion
 
-	
-	// Update is called once per frame
+
     void Start() {
 
+        //Her tjekkes der efter tidligere tilpasninger af spilleren i den globale klasse
         if ((CCGlobal.barrel+CCGlobal.mag+CCGlobal.sight+CCGlobal.under) == "")
         {
-            //Default Attachments
+            //Hvis der ikke er nogen tidligere tilpasning, så vises disse standard GameObjects
             renderBarrel = Barrel1;
             renderMag = Mag1;
             renderSight = Sight1;
             renderUnder = Under1;
-            Debug.Log("No Savedata!");
         }
         else {
 
@@ -67,24 +70,24 @@ public class Custom : MonoBehaviour
 
         }
 
-        //Derender alle objecter
+        //Her kalder jeg Derender metoden
         Derender();
         
     }
 
-    void OnGUI () { 
-
+    void OnGUI()
+    {
+        //Dette stykke kode placere en knap over resten af knapperne lægnere nede som lader spilleren gå tilbage til hovedmenuen og gemme sin tilpasning
         if (GUI.Button(new Rect(width1, height0, buttonWidth, buttonHeight), "Exit to Menu"))
         {
             Save();
             Application.LoadLevel("LobbyScene");
         }
 
-        //all buttons for the attachments
+        //her er alle de individuelle knapper som spilleren bruger til at tilpasse våbenet
         #region Attachment Buttons
 
-        //Barrel
-        #region
+        #region Barrel
         if (GUI.Button(new Rect(width1, height1, buttonWidth, buttonHeight), "Barrel 1"))
         {
             renderBarrel = Barrel1;
@@ -110,8 +113,7 @@ public class Custom : MonoBehaviour
         }
         #endregion
 
-        //Sight
-        #region
+        #region Sight
         if (GUI.Button(new Rect(width2, height1, buttonWidth, buttonHeight), "Sight 1"))
         {
             renderSight = Sight1;
@@ -137,8 +139,7 @@ public class Custom : MonoBehaviour
         }
         #endregion
 
-        //Mag
-        #region
+        #region Mag
         if (GUI.Button(new Rect(width3, height1, buttonWidth, buttonHeight), "Mag 1"))
         {
             renderMag = Mag1;
@@ -164,8 +165,7 @@ public class Custom : MonoBehaviour
         }
         #endregion
 
-        //Under
-        #region
+        #region Under
         if (GUI.Button(new Rect(width4, height1, buttonWidth, buttonHeight), "Under 1"))
         {
             renderUnder = Under1;
@@ -194,11 +194,10 @@ public class Custom : MonoBehaviour
 
         #endregion
     }
-
+    //Denne metode derender alle de GameObjects og bagefter genrendere de objekter som skal vises
     void Derender() 
     {
-        //Derender alle objecter
-        #region Derender
+        //Derender alle GameObjects
         Under1.renderer.enabled = false;
         Under2.renderer.enabled = false;
         Under3.renderer.enabled = false;
@@ -214,9 +213,8 @@ public class Custom : MonoBehaviour
         Sight1.renderer.enabled = false;
         Sight2.renderer.enabled = false;
         Sight3.renderer.enabled = false;
-        #endregion
 
-        //renderer de korrekte objekter hele tiden
+        //Metoden tjekker om det ønskede GameObject er null eller lig med intet før at den rendere det, hvis at GameObject er lig med intet så bliver det ikke renderet
         if(renderBarrel != null){
             renderBarrel.renderer.enabled = true;
         }
@@ -237,8 +235,11 @@ public class Custom : MonoBehaviour
         }
     }
 
+    //Denne metode gemmer spilleren tilpasing af våbenet
+    //Metoden gemmer navnene på alle de viste GameObjects, i den globale klasse så de kan hentes senere eller i en anden scene
     void Save() {
 
+        //Metoden sørger for at der er et navn at gemme, ellers bliver strengen sat lig med intet
         if (renderBarrel != null)
         {
             CCGlobal.barrel = renderBarrel.name;
@@ -270,15 +271,16 @@ public class Custom : MonoBehaviour
         else {
             CCGlobal.under = null;
         }
-
-        
-
-        Debug.Log("Saved!");
     }
 
+    //Denne metode viser spilleren tidligere tilpasing ind i scenen
+    //Den henter navnene på de tidliger vaglte GameObjects og sætter dem lig med de renderende GameObjects
     void Load() {
+        //Dette GameObject er et midlertidigt GameObjects som bliver sat ligmed de GameObjects som skal vises
+        //Så bliver den sat lig med de renderende GameObjects for at blive vist
         GameObject load;
 
+        //Før at dette GameObject bliver hentet tjekker metoden om der et GameObject at hente, hvis ikke så er "load" lig med intet
         if (CCGlobal.barrel != null)
         {
             load = GameObject.Find(CCGlobal.barrel);
@@ -318,11 +320,10 @@ public class Custom : MonoBehaviour
         {
             load = null;
         }
-
-        Debug.Log("Loaded Savedata!");
     }
 }
 
+//Denne klasse holder styr på spillerens tidligere tilpasning. Den gemmer navnene på de GameObjects som spilleren har valgt
 public static class CCGlobal {
 
     public static string barrel;
