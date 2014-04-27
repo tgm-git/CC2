@@ -37,16 +37,6 @@ public class LobbyScript : MonoBehaviour {
         {
             Application.Quit();
         }
-        #region Temporary things
-        if (GUI.Button(new Rect(Screen.width - 150, 50, 100, 45), "Start Server"))
-        {
-            Network.InitializeServer(7, 8500, false);
-        }
-        if (GUI.Button(new Rect(Screen.width - 150, 100, 100, 45), "Join Game"))
-        {
-            Network.Connect(ip, 8500);
-        }
-        #endregion
     }
     void OnConnectedToServer()
     {
