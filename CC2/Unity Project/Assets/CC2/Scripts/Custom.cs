@@ -26,7 +26,7 @@ public class Custom : MonoBehaviour
     float width1 = Screen.width / 6;
     float width2 = Screen.width / 4;
     float width3 = Screen.width / 3;
-    float width4 = Screen.width / 2.4F;
+    float width4 = Screen.width / 2.4F; 
 
     //Assign in inspector
     #region GameObjects
@@ -52,11 +52,20 @@ public class Custom : MonoBehaviour
 	// Update is called once per frame
     void Start() {
 
-        //Default Attachments
-        renderBarrel = Barrel1;
-        renderMag = Mag1;
-        renderSight = Sight1;
-        renderUnder = Under1;
+        if ((CCGlobal.barrel+CCGlobal.mag+CCGlobal.sight+CCGlobal.under) == "")
+        {
+            //Default Attachments
+            renderBarrel = Barrel1;
+            renderMag = Mag1;
+            renderSight = Sight1;
+            renderUnder = Under1;
+            Debug.Log("No Savedata!");
+        }
+        else {
+
+            Load();
+
+        }
 
         //Derender alle objecter
         Derender();
@@ -65,21 +74,9 @@ public class Custom : MonoBehaviour
 
     void OnGUI () { 
 
-        //Guns
-        if (GUI.Button(new Rect(width1, height0, buttonWidth, buttonHeight), "CR"))
+        if (GUI.Button(new Rect(width1, height0, buttonWidth, buttonHeight), "Exit to Menu"))
         {
-            //render gun
-            Derender();
-        }
-
-        if (GUI.Button(new Rect(width2, height0, buttonWidth, buttonHeight), "AR"))
-        {
-            //render gun
-            Derender();
-        }
-
-        if (GUI.Button(new Rect(width3, height0, buttonWidth, buttonHeight), "Exit to Menu"))
-        {
+            Save();
             Application.LoadLevel("LobbyScene");
         }
 
@@ -239,4 +236,98 @@ public class Custom : MonoBehaviour
             renderUnder.renderer.enabled = true;
         }
     }
+
+    void Save() {
+
+        if (renderBarrel != null)
+        {
+            CCGlobal.barrel = renderBarrel.name;
+        }
+        else {
+            CCGlobal.barrel = null;
+        }
+
+        if (renderMag != null)
+        {
+            CCGlobal.mag = renderMag.name;
+        }
+        else {
+            CCGlobal.mag = null;
+        }
+
+        if (renderSight != null)
+        {
+            CCGlobal.sight = renderSight.name;
+        }
+        else {
+            CCGlobal.sight = null;
+        }
+
+        if (renderUnder != null)
+        {
+            CCGlobal.under = renderUnder.name;
+        }
+        else {
+            CCGlobal.under = null;
+        }
+
+        
+
+        Debug.Log("Saved!");
+    }
+
+    void Load() {
+        GameObject load;
+
+        if (CCGlobal.barrel != null)
+        {
+            load = GameObject.Find(CCGlobal.barrel);
+            renderBarrel = load;
+        }
+        else
+        {
+            load = null;
+        }
+
+        if (CCGlobal.mag != null)
+        {
+            load = GameObject.Find(CCGlobal.mag);
+            renderMag = load;
+        }
+        else
+        {
+            load = null;
+        }
+
+        if (CCGlobal.sight != null)
+        {
+            load = GameObject.Find(CCGlobal.sight);
+            renderSight = load;
+        }
+        else
+        {
+            load = null;
+        }
+
+        if (CCGlobal.under != null)
+        {
+            load = GameObject.Find(CCGlobal.under);
+            renderUnder = load;
+        }
+        else
+        {
+            load = null;
+        }
+
+        Debug.Log("Loaded Savedata!");
+    }
+}
+
+public static class CCGlobal {
+
+    public static string barrel;
+    public static string mag;
+    public static string sight;
+    public static string under;
+   
 }
