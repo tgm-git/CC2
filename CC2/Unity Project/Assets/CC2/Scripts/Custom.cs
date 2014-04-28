@@ -18,6 +18,8 @@ public class Custom : MonoBehaviour
     int buttonHeight = 50;
     int buttonWidth = 150;
 
+    bool cusbool = false;
+
     //Dette er nogle standard højde positioner, som bliver brugt til at holde knapperne på line
     float height0 = Screen.height * 0.32F;
     float height1 = Screen.height * 0.4F;
@@ -75,124 +77,136 @@ public class Custom : MonoBehaviour
         
     }
 
+    void Update() {
+        //Her slår jeg tilpasnings fladen til eller fra
+        if (Input.GetKeyDown(KeyCode.T))
+        {
+            cusbool = !cusbool;
+            Save();
+        }
+    }
+
     void OnGUI()
     {
-        //Dette stykke kode placere en knap over resten af knapperne lægnere nede som lader spilleren gå tilbage til hovedmenuen og gemme sin tilpasning
-        if (GUI.Button(new Rect(width1, height0, buttonWidth, buttonHeight), "Exit to Menu"))
+        if (cusbool == true)
         {
-            Save();
-            Application.LoadLevel("LobbyScene");
+            Screen.lockCursor = false;
+            Screen.showCursor = true;
+
+            //her er alle de individuelle knapper som spilleren bruger til at tilpasse våbenet
+            #region Attachment Buttons
+
+            #region Barrel
+            if (GUI.Button(new Rect(width1, height1, buttonWidth, buttonHeight), "Barrel 1"))
+            {
+                renderBarrel = Barrel1;
+                Derender();
+            }
+
+            if (GUI.Button(new Rect(width1, height2, buttonWidth, buttonHeight), "Barrel 2"))
+            {
+                renderBarrel = Barrel2;
+                Derender();
+            }
+
+            if (GUI.Button(new Rect(width1, height3, buttonWidth, buttonHeight), "Barrel 3"))
+            {
+                renderBarrel = Barrel3;
+                Derender();
+            }
+
+            if (GUI.Button(new Rect(width1, height4, buttonWidth, buttonHeight), "None"))
+            {
+                renderBarrel = null;
+                Derender();
+            }
+            #endregion
+
+            #region Sight
+            if (GUI.Button(new Rect(width2, height1, buttonWidth, buttonHeight), "Sight 1"))
+            {
+                renderSight = Sight1;
+                Derender();
+            }
+
+            if (GUI.Button(new Rect(width2, height2, buttonWidth, buttonHeight), "Sight 2"))
+            {
+                renderSight = Sight2;
+                Derender();
+            }
+
+            if (GUI.Button(new Rect(width2, height3, buttonWidth, buttonHeight), "Sight 3"))
+            {
+                renderSight = Sight3;
+                Derender();
+            }
+
+            if (GUI.Button(new Rect(width2, height4, buttonWidth, buttonHeight), "None"))
+            {
+                renderSight = null;
+                Derender();
+            }
+            #endregion
+
+            #region Mag
+            if (GUI.Button(new Rect(width3, height1, buttonWidth, buttonHeight), "Mag 1"))
+            {
+                renderMag = Mag1;
+                Derender();
+            }
+
+            if (GUI.Button(new Rect(width3, height2, buttonWidth, buttonHeight), "Mag 2"))
+            {
+                renderMag = Mag2;
+                Derender();
+            }
+
+            if (GUI.Button(new Rect(width3, height3, buttonWidth, buttonHeight), "Mag 3"))
+            {
+                renderMag = Mag3;
+                Derender();
+            }
+
+            if (GUI.Button(new Rect(width3, height4, buttonWidth, buttonHeight), "None"))
+            {
+                renderMag = null;
+                Derender();
+            }
+            #endregion
+
+            #region Under
+            if (GUI.Button(new Rect(width4, height1, buttonWidth, buttonHeight), "Under 1"))
+            {
+                renderUnder = Under1;
+                Derender();
+
+            }
+
+            if (GUI.Button(new Rect(width4, height2, buttonWidth, buttonHeight), "Under 2"))
+            {
+                renderUnder = Under2;
+                Derender();
+            }
+
+            if (GUI.Button(new Rect(width4, height3, buttonWidth, buttonHeight), "Under 3"))
+            {
+                renderUnder = Under3;
+                Derender();
+            }
+
+            if (GUI.Button(new Rect(width4, height4, buttonWidth, buttonHeight), "None"))
+            {
+                renderUnder = null;
+                Derender();
+            }
+            #endregion
+
+            #endregion
         }
-
-        //her er alle de individuelle knapper som spilleren bruger til at tilpasse våbenet
-        #region Attachment Buttons
-
-        #region Barrel
-        if (GUI.Button(new Rect(width1, height1, buttonWidth, buttonHeight), "Barrel 1"))
-        {
-            renderBarrel = Barrel1;
-            Derender();
+        else {
+            Screen.showCursor = false;
+            Screen.lockCursor = true;
         }
-
-        if (GUI.Button(new Rect(width1, height2, buttonWidth, buttonHeight), "Barrel 2"))
-        {
-            renderBarrel = Barrel2;
-            Derender();
-        }
-
-        if (GUI.Button(new Rect(width1, height3, buttonWidth, buttonHeight), "Barrel 3"))
-        {
-            renderBarrel = Barrel3;
-            Derender();
-        }
-
-        if (GUI.Button(new Rect(width1, height4, buttonWidth, buttonHeight), "None"))
-        {
-            renderBarrel = null;
-            Derender();
-        }
-        #endregion
-
-        #region Sight
-        if (GUI.Button(new Rect(width2, height1, buttonWidth, buttonHeight), "Sight 1"))
-        {
-            renderSight = Sight1;
-            Derender();
-        }
-
-        if (GUI.Button(new Rect(width2, height2, buttonWidth, buttonHeight), "Sight 2"))
-        {
-            renderSight = Sight2;
-            Derender();
-        }
-
-        if (GUI.Button(new Rect(width2, height3, buttonWidth, buttonHeight), "Sight 3"))
-        {
-            renderSight = Sight3;
-            Derender();
-        }
-
-        if (GUI.Button(new Rect(width2, height4, buttonWidth, buttonHeight), "None"))
-        {
-            renderSight = null;
-            Derender();
-        }
-        #endregion
-
-        #region Mag
-        if (GUI.Button(new Rect(width3, height1, buttonWidth, buttonHeight), "Mag 1"))
-        {
-            renderMag = Mag1;
-            Derender();
-        }
-
-        if (GUI.Button(new Rect(width3, height2, buttonWidth, buttonHeight), "Mag 2"))
-        {
-            renderMag = Mag2;
-            Derender();
-        }
-
-        if (GUI.Button(new Rect(width3, height3, buttonWidth, buttonHeight), "Mag 3"))
-        {
-            renderMag = Mag3;
-            Derender();
-        }
-
-        if (GUI.Button(new Rect(width3, height4, buttonWidth, buttonHeight), "None"))
-        {
-            renderMag = null;
-            Derender();
-        }
-        #endregion
-
-        #region Under
-        if (GUI.Button(new Rect(width4, height1, buttonWidth, buttonHeight), "Under 1"))
-        {
-            renderUnder = Under1;
-            Derender();
-
-        }
-
-        if (GUI.Button(new Rect(width4, height2, buttonWidth, buttonHeight), "Under 2"))
-        {
-            renderUnder = Under2;
-            Derender();
-        }
-
-        if (GUI.Button(new Rect(width4, height3, buttonWidth, buttonHeight), "Under 3"))
-        {
-            renderUnder = Under3;
-            Derender();
-        }
-
-        if (GUI.Button(new Rect(width4, height4, buttonWidth, buttonHeight), "None"))
-        {
-            renderUnder = null;
-            Derender();
-        }
-        #endregion
-
-        #endregion
     }
     //Denne metode derender alle de GameObjects og bagefter genrendere de objekter som skal vises
     void Derender() 

@@ -23,16 +23,6 @@ public class LobbyScript : MonoBehaviour {
 	// Update is called once per frame
     void OnGUI()
     {
-        if (GUI.Button(new Rect(Screen.width / 2 - (buttonWidth / 2), Screen.height / 2.4F - (buttonHeight / 2), buttonWidth, buttonHeight), "Start Game"))
-        {
-            Application.LoadLevel("MovementTest");
-        }
-
-        if (GUI.Button(new Rect(Screen.width / 2 - (buttonWidth / 2), Screen.height / 2 - (buttonHeight / 2), buttonWidth, buttonHeight), "Custimize muh guhn!"))
-        {
-            Application.LoadLevel("CustomizationScene");
-        }
-
         if (GUI.Button(new Rect(Screen.width / 2 - (buttonWidth / 2), Screen.height / 1.7F - (buttonHeight / 2), buttonWidth, buttonHeight), "Exit Game"))
         {
             Application.Quit();
