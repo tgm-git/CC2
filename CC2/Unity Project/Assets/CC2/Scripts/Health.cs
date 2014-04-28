@@ -57,11 +57,11 @@ public class Health : MonoBehaviour
     void Update()
     {
         //Hvis spilleren når under 0 helbreds point, dør spilleren og skal derfor vente på at blive respawnet.
-        if(health <= 0)
+        if(health <= 0 && networkView.isMine)
         {
             //Death conditions
             GameManagaer manager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManagaer>();
-            manager.KillPlayer(networkView.viewID, gameObject);
+            manager.KillPlayer(gameObject, Network.player, name.Contains("Red") == true ? true : false);
         }
         //Hvis spillerens skjold går tabt, spawn en effekt:
         if(shield <= 0 && shielded == true)
@@ -86,10 +86,5 @@ public class Health : MonoBehaviour
                 GUI.DrawTexture(new Rect(pos.x - 50, Screen.height - pos.y - 20, (shield / maxShield) * 100, 10), shieldTex);
             }
         }
-    }
-    [RPC]
-    void Die()
-    {
-
     }
 }
