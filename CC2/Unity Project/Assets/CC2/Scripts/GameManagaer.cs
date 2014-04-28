@@ -74,11 +74,6 @@ public class GameManagaer : MonoBehaviour {
     }
     void SpawnNewPlayerLocal(bool isRed, Vector3 spawnPoint)
     {
-        //Jeg spawner den lokale version.
-        //Instantiate(isRed == true ? redPlayer : bluePlayer, spawnPoint, Quaternion.identity);
-        //..Og jeg siger til alle andre på netværket end mig at de skal spawne en klon af den nye spiller.
-        //Fordi jeg spawner en af de andre spillere, vil jeg gerne have styr på hvem de er. Derfor får der hver især 
-        //et tal alt efter hvornår de kom ind i lobbyen.
         GameObject clone = Network.Instantiate(isRed == true ? redPlayer : bluePlayer, spawnPoint, Quaternion.identity, 0) as GameObject;
         allPlayers.Add(clone);
     }

@@ -12,7 +12,6 @@ public class Movement : MonoBehaviour
     public float sprintSpeed = 10;
     private float actualMovespeed = 5;
     private Vector3 moveDirection;
-    private bool canMove = true;
     private bool jumping = false;
     private bool grounded = false;
     private bool crouched = false;
