@@ -43,6 +43,12 @@ public class Health : MonoBehaviour
             shield += value;
         }
     }
+    [RPC]
+    void AddShieldNetwork(float value)
+    {
+        shield = value;
+        shielded = true;
+    }
     public void AddShield(float value)
     {
         shield = value;
@@ -52,7 +58,8 @@ public class Health : MonoBehaviour
         }
         shieldPrefab = Network.Instantiate(shieldPrefb, transform.position, Quaternion.identity, 0) as GameObject;
         shieldPrefab.GetComponent<ShieldPosScript>().myPos = transform;
-        shielded = true;
+        networkView.RPC("AddShieldNetwork", RPCMode.Others, value);
+        shielded = true; 
     }
     void Update()
     {
@@ -60,6 +67,10 @@ public class Health : MonoBehaviour
         if(health <= 0 && networkView.isMine)
         {
             //Death conditions
+            if(shieldPrefab != null)
+            {
+                Network.Destroy(shieldPrefab);
+            }
             GameManagaer manager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManagaer>();
             manager.KillPlayer(gameObject, Network.player, name.Contains("Red") == true ? true : false);
         }
