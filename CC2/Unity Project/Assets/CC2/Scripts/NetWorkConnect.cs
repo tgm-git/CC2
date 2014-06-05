@@ -59,7 +59,7 @@ public class NetWorkConnect : MonoBehaviour
 
             if (GUI.Button(new Rect(10, 80, 120, 20), "Join Game"))
             {
-                Application.LoadLevel(3);
+                Application.LoadLevel(2);
             }
 
             if (GUI.Button(new Rect(10, 105, 120, 20), "Disconnect"))

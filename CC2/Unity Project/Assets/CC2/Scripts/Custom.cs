@@ -79,7 +79,7 @@ public class Custom : MonoBehaviour
 
     void Update() {
         //Her slår jeg tilpasnings fladen til eller fra
-        if (Input.GetKeyDown(KeyCode.T))
+        if (Input.GetKeyDown(KeyCode.Escape))
         {
             cusbool = !cusbool;
             Save();
@@ -92,6 +92,9 @@ public class Custom : MonoBehaviour
         {
             Screen.lockCursor = false;
             Screen.showCursor = true;
+            gameObject.GetComponent<MouseLook>().enabled = false;
+            transform.parent.parent.gameObject.GetComponent<MouseLook>().enabled = false;
+            transform.parent.parent.gameObject.GetComponent<ShootScript>().enabled = false;
 
             //her er alle de individuelle knapper som spilleren bruger til at tilpasse våbenet
             #region Attachment Buttons
@@ -206,6 +209,9 @@ public class Custom : MonoBehaviour
         else {
             Screen.showCursor = false;
             Screen.lockCursor = true;
+            gameObject.GetComponent<MouseLook>().enabled = true;
+            transform.parent.parent.gameObject.GetComponent<MouseLook>().enabled = true;
+            transform.parent.parent.gameObject.GetComponent<ShootScript>().enabled = true;
         }
     }
     //Denne metode derender alle de GameObjects og bagefter genrendere de objekter som skal vises
